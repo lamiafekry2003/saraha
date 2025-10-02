@@ -15,7 +15,7 @@ interface DecodedToken {
   sub: string;
   exp: number;
   iat: number;
-  [key: string]: any; // handle custom claims
+  [key: string]: unknown; // handle custom claims
 }
 
 interface Credentials {
@@ -76,10 +76,13 @@ export const login = createAsyncThunk<Credentials, LoginSchema>(
       const creds = response.data.data.newCredential;
 
       return buildUserFromTokens(creds.accessToken, creds.refreshToken);
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Login failed");
-    }
+    } catch (error: unknown) {
+  if (axios.isAxiosError(error)) {
+    return rejectWithValue(error.response?.data?.message || "Login failed");
   }
+      return rejectWithValue("Login failed");
+  }
+}
 );
 
 // ===== Slice =====
