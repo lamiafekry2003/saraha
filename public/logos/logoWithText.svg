@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="800"
+   height="600"
+   viewBox="0 0 800 600"
+   role="img"
+   aria-labelledby="title desc"
+   version="1.1"
+   id="svg25"
+   sodipodi:docname="logoWithText.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview27"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="0.40187237"
+     inkscape:cx="-8.7092328"
+     inkscape:cy="701.71533"
+     inkscape:window-width="1280"
+     inkscape:window-height="961"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <title
+     id="title">Sraha logo</title>
+  <desc
+     id="desc">Two overlapping speech bubbles (left filled green with three white dots; right outlined) above the word &quot;Sraha&quot;.</desc>
+  <defs
+     id="defs6">
+    <style
+       id="style4">
+      /* keep stroke widths consistent when scaling */
+      .ns { vector-effect: non-scaling-stroke; }
+    </style>
+  </defs>
+  <!-- icon (two speech bubbles) -->
+  <!-- wordmark -->
+  <metadata
+     id="metadata140">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Sraha logo</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1">
+    <g
+       id="icon"
+       transform="translate(-51.5)">
+      <!-- right bubble (outline) -->
+      <path
+         d="m 555.07419,290.31252 48.74234,32.00288 5.30026,-58.06812 z"
+         fill="#0E6B56"
+         id="path983"
+         style="fill:#432dd7;fill-opacity:1" />
+      <rect
+         x="398"
+         y="40"
+         width="340"
+         height="240"
+         rx="60"
+         ry="60"
+         fill="#0E6B56"
+         id="rect981"
+         style="fill:#ffffff;fill-opacity:1;stroke:#432dd7;stroke-width:30;stroke-dasharray:none;stroke-opacity:1" />
+      <!-- right bubble small tail (stroke only) -->
+      <!-- left bubble (filled) -->
+      <rect
+         x="150"
+         y="40"
+         width="340"
+         height="240"
+         rx="60"
+         ry="60"
+         fill="#0E6B56"
+         id="rect12"
+         style="fill:#432dd7;fill-opacity:1" />
+      <!-- left bubble tail -->
+      <path
+         d="m 300,260 30,50 30,-50 z"
+         fill="#0E6B56"
+         id="path14"
+         style="fill:#432dd7;fill-opacity:1" />
+      <!-- inner dots -->
+      <circle
+         cx="250"
+         cy="160"
+         r="14"
+         fill="#ffffff"
+         id="circle16" />
+      <circle
+         cx="320"
+         cy="160"
+         r="14"
+         fill="#ffffff"
+         id="circle18" />
+      <circle
+         cx="390"
+         cy="160"
+         r="14"
+         fill="#ffffff"
+         id="circle20" />
+    </g>
+    <text
+       x="401.34277"
+       y="532"
+       font-family="Inter, system-ui, '-apple-system', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+       font-weight="700"
+       font-size="120"
+       text-anchor="middle"
+       fill="#1F2933"
+       id="text23"
+       style="font-size:220px;fill:#432dd7;fill-opacity:1">Saraha</text>
+  </g>
+</svg>
