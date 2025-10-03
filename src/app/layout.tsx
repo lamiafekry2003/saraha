@@ -1,9 +1,17 @@
-import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/components/provider/providers";
 
+// providers
+import { Providers } from "@/components/providers";
+
+// components
+import Header from "@/components/layout/header/Header";
+import Footer from "@/components/layout/Footer";
+import MainAppHolder from "@/components/layout/MainAppHolder";
+
+// layouts
+import InitTokenCheckLayout from "@/layouts/InitTokenCheckLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +25,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Saraha App",
-  description: "Generated for Saraha Users",
+  description:
+    "Saraha App are a messages application for telling the truth without know the sender information.",
 };
 
 type Props = {
@@ -25,26 +34,23 @@ type Props = {
 };
 
 export default async function RootLayout({ children }: Props) {
-
-
   return (
-    <html
-      suppressHydrationWarning
-
-    >
+    <html suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
       >
-        <ThemeProvider
+        <Providers
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <Providers >
-            {children}
-          </Providers>
-        </ThemeProvider>
+          <InitTokenCheckLayout>
+            <Header />
+            <MainAppHolder>{children}</MainAppHolder>
+            <Footer />
+          </InitTokenCheckLayout>
+        </Providers>
       </body>
     </html>
   );

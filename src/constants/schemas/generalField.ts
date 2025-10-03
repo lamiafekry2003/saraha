@@ -1,11 +1,30 @@
-import {z} from 'zod'
-export const firstName = z.string().min(3,{error:"First name must be at least 3 characters"})
-.max(20,{error:"First name must be at most 20 characters"})
-export const lastName = z.string().min(3,{error:"Last name must be at least 3 characters"})
-.max(20,{error:"Last name must be at most 20 characters"})
-export const email = z.email("Invalid email address")
-export const password = z.string().min(6,{error:"Password must be at least 6 characters"})
-export const phoneNumber = z.string()
-export const gender = z.enum(["male", "female"]).default('male')
-export const role = z.enum(["USER", "ADMIN"]).default('USER')
-export const otp = z.string().regex(/^\d{6}/,{error:"OTP must be 6 digits"})
+import { z } from "zod";
+
+export const firstName = z
+  .string()
+  .min(3, { error: "First name must be at least 3 characters" })
+  .max(20, { error: "First name must be at most 20 characters" });
+
+export const lastName = z
+  .string()
+  .min(3, { error: "Last name must be at least 3 characters" })
+  .max(20, { error: "Last name must be at most 20 characters" });
+
+export const email = z
+  .string()
+  .min(1, { message: "Email is required" })
+  .email({ message: "Invalid email address" });
+
+export const password = z
+  .string()
+  .min(6, { error: "Password must be at least 6 characters" });
+
+export const phoneNumber = z.string();
+
+export const gender = z.enum(["male", "female"]).default("male");
+
+export const role = z.enum(["USER", "ADMIN"]).default("USER");
+
+export const otp = z
+  .string()
+  .regex(/^\d{6}/, { error: "OTP must be 6 digits" });

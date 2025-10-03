@@ -1,21 +1,21 @@
 import { API_AUTH } from "@/constants/api";
 import { LoginSchema } from "@/constants/schemas/loginSchema";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import {
   setAuthCookies,
   clearAuthCookies,
   getTokenFromCookie,
   getRefreshTokenFromCookie,
 } from "@/lib/cookies";
+import type { User } from "@/constants/types";
 
 // ===== Types =====
-interface DecodedToken {
+export interface DecodedToken extends User {
   sub: string;
   exp: number;
   iat: number;
-  [key: string]: unknown; // handle custom claims
 }
 
 interface Credentials {
@@ -46,24 +46,22 @@ const buildUserFromTokens = (
   refreshToken: string
 ): Credentials => {
   let decoded: DecodedToken | undefined = undefined;
+
   try {
     decoded = jwtDecode<DecodedToken>(accessToken);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    console.error("Invalid JWT:", err);
+    throw new Error("can't login at the momment");
   }
+
   return { accessToken, refreshToken, decoded };
 };
 
 // ===== Initial State =====
 const initialState: AuthState = {
-  user:
-    typeof window !== "undefined" && getTokenFromCookie()
-      ? buildUserFromTokens(
-          getTokenFromCookie()!,
-          getRefreshTokenFromCookie()!
-        )
-      : null,
-  isPending: false,
+  user: null,
+  isPending: true,
   isError: false,
 };
 
@@ -77,12 +75,24 @@ export const login = createAsyncThunk<Credentials, LoginSchema>(
 
       return buildUserFromTokens(creds.accessToken, creds.refreshToken);
     } catch (error: unknown) {
-  if (axios.isAxiosError(error)) {
-    return rejectWithValue(error.response?.data?.message || "Login failed");
-  }
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message || "Login failed");
+      }
       return rejectWithValue("Login failed");
+    }
   }
-}
+);
+
+export const initTokenCheck = createAsyncThunk(
+  "auth/initTokenCheck",
+  async () => {
+    if (typeof window === "undefined") return null;
+
+    const access = getTokenFromCookie();
+    const refresh = getRefreshTokenFromCookie();
+
+    return access && refresh ? buildUserFromTokens(access, refresh) : null;
+  }
 );
 
 // ===== Slice =====
@@ -93,6 +103,9 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       clearAuthCookies();
+    },
+    setIsPinding: (state, { payload }: PayloadAction<boolean>) => {
+      state.isPending = payload;
     },
   },
   extraReducers: (builder) => {
@@ -111,9 +124,21 @@ const authSlice = createSlice({
         state.user = null;
         state.isPending = false;
         state.isError = true;
+      })
+      //check user at initial loading of the app
+      .addCase(initTokenCheck.pending, (state) => {
+        state.isPending = true;
+      })
+      .addCase(initTokenCheck.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isPending = false;
+      })
+      .addCase(initTokenCheck.rejected, (state) => {
+        state.user = null;
+        state.isPending = false;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setIsPinding } = authSlice.actions;
 export default authSlice.reducer;
