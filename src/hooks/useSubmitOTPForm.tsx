@@ -8,6 +8,8 @@ import { useState, type FormEvent, type RefObject } from "react";
 import useDispatch from "./redux/useDispatch";
 // actions
 import { confirmEmail } from "@/store/slices/authSlice";
+
+// utils
 import { toast } from "sonner";
 
 type Props = {
@@ -59,7 +61,12 @@ const useSubmitOTPForm = ({ OTPInputRef }: Props) => {
     }
   };
 
-  return { handleSubmit, error, loading };
+  return {
+    handleSubmit,
+    error,
+    loading,
+    isNoEmail: !email ? "NO_EMAIL_FOUNDED" : undefined,
+  };
 };
 
 export default useSubmitOTPForm;

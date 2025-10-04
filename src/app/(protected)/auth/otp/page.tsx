@@ -1,10 +1,7 @@
 "use client";
 
-// nextjs
-import { useSearchParams } from "next/navigation";
-
 // react
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 
 // components
 import Spinner from "@/components/shared/Spinner";
@@ -17,19 +14,16 @@ import useSubmitOTPForm from "@/hooks/useSubmitOTPForm";
 import useRenderOTPPage from "@/hooks/useRenderOTPPage";
 
 const OTPPage = () => {
-  const email = useSearchParams().get("email") || "";
-
   const OTPInputRef = useRef<HTMLInputElement>(null);
 
   const isRender = useRenderOTPPage();
 
-  const { handleSubmit, error, loading } = useSubmitOTPForm({
+  const { handleSubmit, error, loading, isNoEmail } = useSubmitOTPForm({
     OTPInputRef,
   });
 
   if (!isRender) return;
-
-  if (!email)
+  if (isNoEmail === "NO_EMAIL_FOUNDED")
     return (
       <h1 className="text-red-600 font-bold text-2xl">Email Not Found !</h1>
     );
@@ -61,4 +55,20 @@ const OTPPage = () => {
     </div>
   );
 };
-export default OTPPage;
+
+const OTPPageWrapper = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-1 flex-col gap-4 flex items-center justify-center">
+          <div className="max-[280px]:size-[100px] animate-spin rounded-full size-44 max-w-full aspect-[1] border-b-2 border-indigo-600" />
+          <p className="font-bold text-2xl text-indigo-600">Loading...</p>
+        </div>
+      }
+    >
+      <OTPPage />
+    </Suspense>
+  );
+};
+// export default OTPPage;
+export default OTPPageWrapper;
