@@ -21,7 +21,7 @@ const OTPInpt = ({ ref }: Props) => {
       <InputOTPGroup>
         {Array.from({ length: OTP_LENGTH }).map((_, i) => (
           <InputOTPSlot
-            className="!border-indigo-500 border-2 m-1.5 size-12 !rounded-md"
+            className="text-indigo-500 font-bold !border-indigo-500 border-2 m-1.5 size-12 !rounded-md"
             index={i}
             key={i}
           />
