@@ -20,7 +20,7 @@ export default function Authlayout({ children }: Props) {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const authRouts = ["/auth/login", "/auth/register"];
+    const authRouts = ["/auth/login", "/auth/register", "/auth/otp"];
 
     if (authRouts.includes(pathname)) {
       if (user) router.push("/");

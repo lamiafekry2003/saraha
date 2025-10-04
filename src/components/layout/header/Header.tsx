@@ -26,7 +26,7 @@ const Header = () => {
       id="app-header"
       className="shadow fixed top-0 left-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg"
     >
-      <div className="container flex items-center gap-4 justify-between">
+      <div className="container flex-wrap flex items-center gap-4 justify-between py-4">
         <Link href="/">
           <Image
             src="/logos/logoWithText.svg"
@@ -34,10 +34,11 @@ const Header = () => {
             width={80}
             height={80}
             className="aspect-[1] object-contain"
+            priority
           />
         </Link>
 
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center flex-wrap gap-4">
           <Button asChild variant="outline" className="hidden sm:inline-flex">
             <a href="#">How It Works</a>
           </Button>

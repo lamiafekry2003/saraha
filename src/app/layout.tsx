@@ -13,6 +13,9 @@ import MainAppHolder from "@/components/layout/MainAppHolder";
 // layouts
 import InitTokenCheckLayout from "@/layouts/InitTokenCheckLayout";
 
+// utils
+import { Toaster } from "sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -39,6 +42,7 @@ export default async function RootLayout({ children }: Props) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
       >
+        <Toaster richColors duration={6000} />
         <Providers
           attribute="class"
           defaultTheme="light"

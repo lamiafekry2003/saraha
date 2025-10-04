@@ -122,6 +122,18 @@
   button {
     @apply cursor-pointer;
   }
+  label {
+    @apply !text-indigo-600;
+  }
+  input {
+    @apply border !border-indigo-600 focus:!border-indigo-300 focus:outline-indigo-300 focus:outline-offset-4 transition;
+  }
+  input::placeholder {
+    @apply text-indigo-600 transition;
+  }
+  input:focus {
+    @apply placeholder:opacity-0;
+  }
   .container {
     @apply mx-auto px-4;
   }

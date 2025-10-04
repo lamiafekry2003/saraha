@@ -1,7 +1,8 @@
-import { API_AUTH } from "@/constants/api";
-import { LoginSchema } from "@/constants/schemas/loginSchema";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { API_AUTH } from "@/constants/api";
 import axios from "axios";
+
 import { jwtDecode } from "jwt-decode";
 import {
   setAuthCookies,
@@ -9,7 +10,12 @@ import {
   getTokenFromCookie,
   getRefreshTokenFromCookie,
 } from "@/lib/cookies";
+
+// types
+import type { LoginSchema } from "@/constants/schemas/loginSchema";
 import type { User } from "@/constants/types";
+import type { RegisterSchema } from "@/constants/schemas/registerSchema";
+import type { ConfirmEmail } from "@/constants/schemas/confirmEmailSchema";
 
 // ===== Types =====
 export interface DecodedToken extends User {
@@ -75,10 +81,63 @@ export const login = createAsyncThunk<Credentials, LoginSchema>(
 
       return buildUserFromTokens(creds.accessToken, creds.refreshToken);
     } catch (error: unknown) {
+      const errorMsg = "Login failed";
+
       if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.data?.message || "Login failed");
+        const errorData = error.response?.data;
+
+        return rejectWithValue({
+          message: errorData?.error || errorMsg,
+          redirect: errorData?.data?.redirect,
+        });
       }
-      return rejectWithValue("Login failed");
+      return rejectWithValue({ message: errorMsg });
+    }
+  }
+);
+
+export const register = createAsyncThunk<string, RegisterSchema>(
+  "auth/register",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<AuthResponse>(
+        API_AUTH.register,
+        values
+      );
+
+      return response.data.message;
+    } catch (error: unknown) {
+      const errorMsg = "Register failed";
+
+      if (axios.isAxiosError(error)) {
+        const directError = error.response?.data?.error;
+        const detailedError =
+          error.response?.data?.details?.[0]?.details?.[0]?.message;
+
+        return rejectWithValue(directError || detailedError || errorMsg);
+      }
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+
+export const confirmEmail = createAsyncThunk<string, ConfirmEmail>(
+  "auth/confirmEmail",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch<AuthResponse>(
+        API_AUTH.confirmEmail,
+        values
+      );
+
+      return response.data.message;
+    } catch (error: unknown) {
+      const errorMsg = "Can't confirm your email at the momment";
+
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.error || errorMsg);
+      }
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -114,23 +173,36 @@ const authSlice = createSlice({
         state.isPending = true;
         state.isError = false;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.user = payload;
         state.isPending = false;
         state.isError = false;
-        setAuthCookies(action.payload);
+        setAuthCookies(payload);
       })
       .addCase(login.rejected, (state) => {
         state.user = null;
         state.isPending = false;
         state.isError = true;
       })
-      //check user at initial loading of the app
+
+      // register a new user
+      .addCase(register.pending, (state) => {
+        state.isPending = true;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.isPending = false;
+      })
+      .addCase(register.rejected, (state) => {
+        state.user = null;
+        state.isPending = false;
+      })
+
+      // check user at initial loading of the app
       .addCase(initTokenCheck.pending, (state) => {
         state.isPending = true;
       })
-      .addCase(initTokenCheck.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(initTokenCheck.fulfilled, (state, { payload }) => {
+        state.user = payload;
         state.isPending = false;
       })
       .addCase(initTokenCheck.rejected, (state) => {
