@@ -1,7 +1,8 @@
-import { API_AUTH } from "@/constants/api";
-import { LoginSchema } from "@/constants/schemas/loginSchema";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { API_AUTH } from "@/constants/api";
 import axios from "axios";
+
 import { jwtDecode } from "jwt-decode";
 import {
   setAuthCookies,
@@ -9,7 +10,11 @@ import {
   getTokenFromCookie,
   getRefreshTokenFromCookie,
 } from "@/lib/cookies";
+
+// types
+import type { LoginSchema } from "@/constants/schemas/loginSchema";
 import type { User } from "@/constants/types";
+import type { RegisterSchema } from "@/constants/schemas/registerSchema";
 
 // ===== Types =====
 export interface DecodedToken extends User {
@@ -83,6 +88,36 @@ export const login = createAsyncThunk<Credentials, LoginSchema>(
   }
 );
 
+export const register = createAsyncThunk<Credentials, RegisterSchema>(
+  "auth/register",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<AuthResponse>(
+        API_AUTH.register,
+        values
+      );
+      console.log(response);
+
+      const creds = response.data.data.newCredential;
+
+      return buildUserFromTokens(creds.accessToken, creds.refreshToken);
+    } catch (error: unknown) {
+      console.log(error);
+
+      if (axios.isAxiosError(error)) {
+        const directError = error.response?.data?.error;
+        const detailedError =
+          error.response?.data?.details?.[0]?.details?.[0]?.message;
+
+        return rejectWithValue(
+          directError || detailedError || "Register failed"
+        );
+      }
+      return rejectWithValue("Register failed");
+    }
+  }
+);
+
 export const initTokenCheck = createAsyncThunk(
   "auth/initTokenCheck",
   async () => {
@@ -125,7 +160,21 @@ const authSlice = createSlice({
         state.isPending = false;
         state.isError = true;
       })
-      //check user at initial loading of the app
+
+      // register a new user
+      .addCase(register.pending, (state) => {
+        state.isPending = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isPending = false;
+      })
+      .addCase(register.rejected, (state) => {
+        state.user = null;
+        state.isPending = false;
+      })
+
+      // check user at initial loading of the app
       .addCase(initTokenCheck.pending, (state) => {
         state.isPending = true;
       })

@@ -2,8 +2,11 @@
 
 // nextjs
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+// react
+import { useState } from "react";
 
 // handle forms
 import { useForm } from "react-hook-form";
@@ -19,10 +22,12 @@ import { login } from "@/store/slices/authSlice";
 import { loginSchema, type LoginSchema } from "@/constants/schemas/loginSchema";
 
 // components
-import Spinner from "@/components/shared/Spinner";
+import AuthFormSubmitBtn from "../components/AuthFormSubmitBtn";
+import AuthFormIllustrationSide from "../components/AuthFormIllustrationSide";
+import loginFormInputs from "@/constants/loginFormInputs";
+import AuthFormInput from "../components/AuthFormInput";
 // shadcn
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -62,23 +67,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center gap-8 text-gray-800">
-      <div className="flex-[0.8] max-md:hidden space-y-2 text-center">
-        <Image
-          src="/illustrations/messages.svg"
-          alt="message illustration"
-          width={300}
-          height={300}
-          className="max-w-full object-contain aspect-[1] mx-auto"
-        />
-        <p className="font-bold text-indigo-700 text-4xl">
-          Share Your Truth Without Fear
-        </p>
-
-        <p className="text-indigo-500 font-semibold">
-          Receive honest feedback and messages from friends, colleagues, and
-          anyone who knows your link. 100% anonymous, 100% real.
-        </p>
-      </div>
+      <AuthFormIllustrationSide />
 
       <div className="border border-indigo-400 space-y-8 p-8 flex-1 shadow-md rounded-md shadow-indigo-900/65">
         <div className="text-center space-y-3">
@@ -91,71 +80,24 @@ export default function LoginPage() {
             priority
           />
 
-          <h2 className="text-3xl font-bold text-indigo-700">Sign In</h2>
+          <h1 className="text-3xl font-bold text-indigo-700">Sign In</h1>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              {...register("email")}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md ${
-                errors.email ? "border-red-500" : "border-gray-800"
-              }`}
-              placeholder="Enter your email"
+          {loginFormInputs.map((input) => (
+            <AuthFormInput
+              errors={errors}
+              key={input.inputId}
+              register={register}
+              {...input}
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+          ))}
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password")}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md ${
-                errors.password ? "border-red-500" : "border-gray-800"
-              }`}
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            disabled={isPending}
-            className="w-full p-3"
-            style={{ height: "unset" }}
-          >
-            {isPending ? (
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                <Spinner />
-                Signing in...
-              </div>
-            ) : (
-              "Sign In"
-            )}
-          </Button>
+          <AuthFormSubmitBtn
+            isPending={isPending}
+            loadingText="Signing in..."
+            normalText="Sign In"
+          />
         </form>
 
         {globalError && (
