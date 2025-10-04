@@ -126,7 +126,7 @@
     @apply !text-indigo-600;
   }
   input {
-    @apply !border-indigo-600 focus:!border-indigo-300 outline-indigo-300 outline-offset-4 transition;
+    @apply border !border-indigo-600 focus:!border-indigo-300 focus:outline-indigo-300 focus:outline-offset-4 transition;
   }
   input::placeholder {
     @apply text-indigo-600 transition;

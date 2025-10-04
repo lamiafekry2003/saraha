@@ -29,6 +29,9 @@ import AuthFormInput from "../components/AuthFormInput";
 // shadcn
 import { Button } from "@/components/ui/button";
 
+// utils
+import { allowAccess } from "@/lib/allowAccessOnOPTPage";
+
 export default function LoginPage() {
   const dispatch = useDispatch();
 
@@ -51,6 +54,8 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
+    const globalErrorMsg = "something wen't wrong while loging in";
+
     try {
       const result = await dispatch(login(data));
 
@@ -58,10 +63,19 @@ export default function LoginPage() {
         router.push("/");
         setGlobalError("");
       } else {
-        setGlobalError("Invalid Username or Password");
+        const errorData = result.payload as {
+          message: string;
+          redirect?: boolean;
+        };
+
+        if (errorData.redirect) {
+          allowAccess();
+          router.push(`/auth/otp?email=${data.email}`);
+        }
+        setGlobalError(errorData.message || globalErrorMsg);
       }
     } catch {
-      setGlobalError("something wen't wrong while login");
+      setGlobalError(globalErrorMsg);
     }
   };
 

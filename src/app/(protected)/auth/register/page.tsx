@@ -34,6 +34,9 @@ import AuthFormInput from "../components/AuthFormInput";
 // shadcn
 import { Button } from "@/components/ui/button";
 
+// utils
+import { allowAccess } from "@/lib/allowAccessOnOPTPage";
+
 export default function LoginPage() {
   const dispatch = useDispatch();
 
@@ -66,13 +69,15 @@ export default function LoginPage() {
 
     try {
       const result = await dispatch(registerThunkAction(data));
-      console.log("result", result);
 
       if (registerThunkAction.fulfilled.match(result)) {
-        router.push("/");
+        allowAccess();
+        router.push(`/auth/otp?email=${data.email}`);
         setGlobalError("");
       } else {
-        setGlobalError((result.payload as string) || globalErrorMsg);
+        setGlobalError(
+          typeof result.payload !== "string" ? globalErrorMsg : result.payload
+        );
       }
     } catch {
       setGlobalError(globalErrorMsg);

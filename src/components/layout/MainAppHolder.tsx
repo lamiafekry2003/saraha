@@ -27,7 +27,7 @@ const MainAppHolder = ({ children }: Props) => {
   }, []);
 
   return (
-    <main ref={mainElRef} className="container flex-1 mb-8">
+    <main ref={mainElRef} className="container flex flex-col flex-1 mb-8">
       {children}
     </main>
   );

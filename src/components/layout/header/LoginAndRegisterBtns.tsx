@@ -22,13 +22,13 @@ const LoginAndRegisterBtns = ({ isPending, user }: Props) => {
   return (
     <>
       {pathname !== "/auth/login" && (
-        <Button variant="outline">
+        <Button variant="outline" asChild>
           <Link href="/auth/login">Log In</Link>
         </Button>
       )}
 
       {pathname !== "/auth/register" && (
-        <Button>
+        <Button asChild>
           <Link href="/auth/register">Register</Link>
         </Button>
       )}

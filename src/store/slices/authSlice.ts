@@ -15,6 +15,7 @@ import {
 import type { LoginSchema } from "@/constants/schemas/loginSchema";
 import type { User } from "@/constants/types";
 import type { RegisterSchema } from "@/constants/schemas/registerSchema";
+import type { ConfirmEmail } from "@/constants/schemas/confirmEmailSchema";
 
 // ===== Types =====
 export interface DecodedToken extends User {
@@ -80,15 +81,22 @@ export const login = createAsyncThunk<Credentials, LoginSchema>(
 
       return buildUserFromTokens(creds.accessToken, creds.refreshToken);
     } catch (error: unknown) {
+      const errorMsg = "Login failed";
+
       if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.data?.message || "Login failed");
+        const errorData = error.response?.data;
+
+        return rejectWithValue({
+          message: errorData?.error || errorMsg,
+          redirect: errorData?.data?.redirect,
+        });
       }
-      return rejectWithValue("Login failed");
+      return rejectWithValue({ message: errorMsg });
     }
   }
 );
 
-export const register = createAsyncThunk<Credentials, RegisterSchema>(
+export const register = createAsyncThunk<string, RegisterSchema>(
   "auth/register",
   async (values, { rejectWithValue }) => {
     try {
@@ -96,24 +104,40 @@ export const register = createAsyncThunk<Credentials, RegisterSchema>(
         API_AUTH.register,
         values
       );
-      console.log(response);
 
-      const creds = response.data.data.newCredential;
-
-      return buildUserFromTokens(creds.accessToken, creds.refreshToken);
+      return response.data.message;
     } catch (error: unknown) {
-      console.log(error);
+      const errorMsg = "Register failed";
 
       if (axios.isAxiosError(error)) {
         const directError = error.response?.data?.error;
         const detailedError =
           error.response?.data?.details?.[0]?.details?.[0]?.message;
 
-        return rejectWithValue(
-          directError || detailedError || "Register failed"
-        );
+        return rejectWithValue(directError || detailedError || errorMsg);
       }
-      return rejectWithValue("Register failed");
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+
+export const confirmEmail = createAsyncThunk<string, ConfirmEmail>(
+  "auth/confirmEmail",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch<AuthResponse>(
+        API_AUTH.confirmEmail,
+        values
+      );
+
+      return response.data.message;
+    } catch (error: unknown) {
+      const errorMsg = "Can't confirm your email at the momment";
+
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.error || errorMsg);
+      }
+      return rejectWithValue(errorMsg);
     }
   }
 );
@@ -149,11 +173,11 @@ const authSlice = createSlice({
         state.isPending = true;
         state.isError = false;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.user = payload;
         state.isPending = false;
         state.isError = false;
-        setAuthCookies(action.payload);
+        setAuthCookies(payload);
       })
       .addCase(login.rejected, (state) => {
         state.user = null;
@@ -165,8 +189,7 @@ const authSlice = createSlice({
       .addCase(register.pending, (state) => {
         state.isPending = true;
       })
-      .addCase(register.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(register.fulfilled, (state) => {
         state.isPending = false;
       })
       .addCase(register.rejected, (state) => {
@@ -178,8 +201,8 @@ const authSlice = createSlice({
       .addCase(initTokenCheck.pending, (state) => {
         state.isPending = true;
       })
-      .addCase(initTokenCheck.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(initTokenCheck.fulfilled, (state, { payload }) => {
+        state.user = payload;
         state.isPending = false;
       })
       .addCase(initTokenCheck.rejected, (state) => {
