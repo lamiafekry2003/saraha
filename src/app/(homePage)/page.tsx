@@ -3,6 +3,12 @@
 // redux
 import useSelector from "@/hooks/redux/useSelector";
 
+// sections
+import LandingSection from "./sections/LandingSection";
+import FeaturesSection from "./sections/FeaturesSection";
+import HowItWorksSection from "./sections/HowItWorksSection";
+import CTASection from "./sections/CTASection";
+
 export default function Home() {
   const { isPending } = useSelector((state) => state.auth);
 
@@ -14,5 +20,13 @@ export default function Home() {
       </div>
     );
   }
-  return <h1> Hello world</h1>;
+
+  return (
+    <>
+      <LandingSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <CTASection />
+    </>
+  );
 }
