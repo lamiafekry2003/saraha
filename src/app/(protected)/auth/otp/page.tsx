@@ -70,5 +70,4 @@ const OTPPageWrapper = () => {
     </Suspense>
   );
 };
-// export default OTPPage;
 export default OTPPageWrapper;

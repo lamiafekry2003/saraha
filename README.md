@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# About This Web Application
 
-## Getting Started
+**Truthly** is an anonymous messaging web application inspired by platforms like _Sarahah_.  
+It allows users to receive honest messages or feedback from others — completely anonymously and without fear of judgment.
 
-First, run the development server:
+The app focuses on **privacy, simplicity, and modern UI/UX**.  
+Users can:
+
+- Create an account using secure **OTP verification**.
+- Receive anonymous messages through their unique shareable link.
+- Browse, delete, or manage received messages from their personal dashboard.
+- Explore a clean and responsive interface with smooth navigation.
+
+# Tech Stack
+
+This project is built using a modern frontend and backend setup:
+
+| Layer            | Technology                         |
+| ---------------- | ---------------------------------- |
+| Frontend         | **Next.js 15** (App Router)        |
+| Styling          | **Tailwind CSS** + **shadcn/ui**   |
+| State Management | **Redux Toolkit**                  |
+| Authentication   | **OTP Verification** (Email based) |
+| Database         | **MongoDB** (with Mongoose ORM)    |
+| API              | **Nodejs **                        |
+| Deployment       | **Vercel**                         |
+
+---
+
+# Features
+
+- Secure OTP-based authentication
+- Anonymous message sharing system
+- Intuitive and responsive UI
+- Real-time message updates
+- Optimized for mobile and desktop
+- Pixel-perfect design following Figma reference
+
+# How It Works
+
+1. **User Registration**  
+   The user signs up using an email or phone number and verifies via OTP.
+
+2. **Shareable Profile Link**  
+   After verification, each user gets a unique link to share publicly.
+
+3. **Receiving Messages**  
+   Anyone with the link can send an anonymous message — no login required.
+
+4. **Profile Dashboard**  
+   The user can view, manage, or delete received messages securely.
+
+---
+
+# Development Setup
+
+1- Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+    git clone https://github.com/ahmedtarekwork/saraha.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2- Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+    npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3- Run the development server
 
-## Learn More
+```bash
+    npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4- visit the local server url http://localhost:5500
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- If You want to change the post you can do that by:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  - open package.json file, it's inside the root directory of the project
 
-## Deploy on Vercel
+  - In the **"scripts"** object, You will find **"dev"** property
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  ```bash
+        "scripts": {
+          "dev": "next dev -p 5500",
+           ...
+        },
+  ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  - change the **-p** flag to the post number You want
+
+  ```bash
+        "scripts": {
+          "dev": "next dev -p <NEW_PORT>",
+          ...
+        },
+  ```
+
+# Authors
+
+Developed with ❤️ by :
+
+- [Ahmed Tarek](https://ahmed-profile.vercel.app)
+
+  Frontend Developer, made the frontend of this project with Nextjs.
+
+- [Lamia Fekry](https://ahmed-profile.vercel.app)
+
+  Fullstack Developer, developed the Nodejs API and manage the MongoDB for this project.
