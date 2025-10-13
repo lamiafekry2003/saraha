@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button";
 
 // utils
 import { allowAccess } from "@/lib/allowAccessOnOPTPage";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -94,8 +95,21 @@ export default function LoginPage() {
             priority
           />
 
-          <h1 className="text-3xl font-bold text-indigo-700">Sign In</h1>
+          <h1 className="text-3xl font-bold text-indigo-700">Sign In with: </h1>
         </div>
+         {/* Google Button + OR */}
+                <div className="space-y-4">
+                  <GoogleLoginButton
+          onSuccessRedirect="/"
+          onError={(msg) => setGlobalError(msg)}
+        />
+        
+                  <div className="flex items-center gap-2 my-4">
+                    <hr className="flex-1 border-gray-400" />
+                    <span className="text-gray-500 font-medium">OR</span>
+                    <hr className="flex-1 border-gray-400" />
+                  </div>
+                </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {loginFormInputs.map((input) => (

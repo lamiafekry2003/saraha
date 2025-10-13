@@ -104,6 +104,6 @@ Developed with ❤️ by :
 
   Frontend Developer, made the frontend of this project with Nextjs.
 
-- [Lamia Fekry](https://ahmed-profile.vercel.app)
+- [Lamia Fekry](https://www.linkedin.com/in/lamia-fekry)
 
   Fullstack Developer, developed the Nodejs API and manage the MongoDB for this project.

@@ -1,4 +1,5 @@
 const BASE_URL = `https://sara7aapp.duckdns.org`;
+// const BASE_URL = `http://localhost:3000`;
 const BASE_AUTH = `${BASE_URL}/api/auth`;
 // auth
 export const API_AUTH = {

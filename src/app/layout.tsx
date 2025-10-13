@@ -15,6 +15,10 @@ import InitTokenCheckLayout from "@/layouts/InitTokenCheckLayout";
 
 // utils
 import { Toaster } from "sonner";
+import GoogleProvider from "./(protected)/auth/components/Providers/GoogleProviders";
+
+// google auth
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +47,8 @@ export default async function RootLayout({ children }: Props) {
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
       >
         <Toaster richColors duration={6000} />
-        <Providers
+        <GoogleProvider>
+             <Providers
           attribute="class"
           defaultTheme="light"
           enableSystem
@@ -55,6 +60,10 @@ export default async function RootLayout({ children }: Props) {
             <Footer />
           </InitTokenCheckLayout>
         </Providers>
+        </GoogleProvider>
+         
+
+        
       </body>
     </html>
   );

@@ -47,7 +47,7 @@ interface AuthState {
 }
 
 // ===== Helper =====
-const buildUserFromTokens = (
+export const buildUserFromTokens = (
   accessToken: string,
   refreshToken: string
 ): Credentials => {
@@ -166,6 +166,12 @@ const authSlice = createSlice({
     setIsPinding: (state, { payload }: PayloadAction<boolean>) => {
       state.isPending = payload;
     },
+  setCredentials: (state, { payload }: PayloadAction<Credentials>) => {
+  state.user = payload;
+  state.isPending = false;
+  state.isError = false;
+  setAuthCookies(payload); 
+},
   },
   extraReducers: (builder) => {
     builder
@@ -212,5 +218,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, setIsPinding } = authSlice.actions;
+export const { logout, setIsPinding,setCredentials } = authSlice.actions;
 export default authSlice.reducer;
